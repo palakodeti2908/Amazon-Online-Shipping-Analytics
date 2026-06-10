@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amazon Shipping Analytics</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<div class="app">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+        <rect width="28" height="28" rx="6" fill="#FF9900"/>
+        <path d="M7 14h14M14 7v14" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="14" cy="14" r="4" stroke="#fff" stroke-width="2"/>
+      </svg>
+      <span class="brand-text">ShipAnalytics</span>
+    </div>
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-page="overview">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        <span>Overview</span>
+      </button>
+      <button class="nav-item" data-page="orders">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
+        <span>Orders</span>
+      </button>
+      <button class="nav-item" data-page="revenue">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        <span>Revenue</span>
+      </button>
+      <button class="nav-item" data-page="shipping">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        <span>Shipping</span>
+      </button>
+      <button class="nav-item" data-page="products">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+        <span>Products</span>
+      </button>
+      <button class="nav-item" data-page="team">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        <span>Team</span>
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="data-period">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span>830 Orders &bull; 91 Customers</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <!-- Top Bar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="menu-btn" id="menuBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <h1 class="page-title" id="pageTitle">Overview</h1>
+      </div>
+      <div class="topbar-right">
+        <div class="amazon-badge">
+          <svg width="20" height="20" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#FF9900"/><path d="M7 14h14M14 7v14" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg>
+          Amazon Shipping Analytics
+        </div>
+      </div>
+    </header>
+
+    <div class="page-container">
+
+      <!-- ===== OVERVIEW PAGE ===== -->
+      <div id="overview-page" class="page active">
+        <div class="kpi-grid" id="kpiGrid">
+          <div class="kpi-card" data-color="orange">
+            <div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg></div>
+            <div class="kpi-content">
+              <div class="kpi-value" id="kpi-totalOrders">—</div>
+              <div class="kpi-label">Total Orders</div>
+            </div>
+          </div>
+          <div class="kpi-card" data-color="blue">
+            <div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+            <div class="kpi-content">
+              <div class="kpi-value" id="kpi-totalRevenue">—</div>
+              <div class="kpi-label">Total Revenue</div>
+            </div>
+          </div>
+          <div class="kpi-card" data-color="green">
+            <div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
+            <div class="kpi-content">
+              <div class="kpi-value" id="kpi-onTimeRate">—</div>
+              <div class="kpi-label">On-Time Rate</div>
+            </div>
+          </div>
+          <div class="kpi-card" data-color="purple">
+            <div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+            <div class="kpi-content">
+              <div class="kpi-value" id="kpi-totalCustomers">—</div>
+              <div class="kpi-label">Customers</div>
+            </div>
+          </div>
+          <div class="kpi-card" data-color="teal">
+            <div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+            <div class="kpi-content">
+              <div class="kpi-value" id="kpi-avgFreight">—</div>
+              <div class="kpi-label">Avg Freight</div>
+            </div>
+          </div>
+          <div class="kpi-card" data-color="amber">
+            <div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></div>
+            <div class="kpi-content">
+              <div class="kpi-value" id="kpi-avgOrderValue">—</div>
+              <div class="kpi-label">Avg Order Value</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="charts-grid">
+          <div class="chart-card span-2">
+            <div class="chart-header">
+              <h3>Orders &amp; Revenue Over Time</h3>
+            </div>
+            <div class="chart-body">
+              <canvas id="ordersRevenueChart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header"><h3>Revenue by Category</h3></div>
+            <div class="chart-body chart-body-sm">
+              <canvas id="categoryDonutChart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header"><h3>Delivery Status</h3></div>
+            <div class="chart-body chart-body-sm">
+              <canvas id="deliveryDonutChart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card span-2">
+            <div class="chart-header"><h3>Top Customers by Revenue</h3></div>
+            <div class="chart-body">
+              <canvas id="topCustomersOverviewChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== ORDERS PAGE ===== -->
+      <div id="orders-page" class="page">
+        <div class="charts-grid">
+          <div class="chart-card span-2">
+            <div class="chart-header"><h3>Monthly Order Volume</h3></div>
+            <div class="chart-body">
+              <canvas id="monthlyOrdersChart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card span-2">
+            <div class="chart-header"><h3>Orders by Destination Country (Top 15)</h3></div>
+            <div class="chart-body chart-body-tall">
+              <canvas id="ordersByCountryChart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header"><h3>Orders by Shipping Carrier</h3></div>
+            <div class="chart-body">
+              <canvas id="ordersByShipperChart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header"><h3>Monthly Freight Cost</h3></div>
+            <div class="chart-body">
+              <canvas id="freightTrendChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== REVENUE PAGE ===== -->
+      <div id="revenue-page" class="page">
+        <div class="charts-grid">
+          <div class="chart-card span-2">
+            <div class="chart-header"><h3>Revenue Trend (Monthly)</h3></div>
+            <div class="chart-body">
+              <canvas id="revenueAreaChart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card span-2">
+            <div class="chart-header"><h3>Revenue by Country (Top 15)</h3></div>
+            <div class="chart-body chart-body-tall">
+              <canvas id="revenueByCountryChart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header"><h3>Revenue by Product Category</h3></div>
+            <div class="chart-body">
+              <canvas id="revenueByCategoryChart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header"><h3>Top 10 Customers</h3></div>
+            <div class="chart-body">
+              <canvas id="topCustomersChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== SHIPPING PAGE ===== -->
+      <div id="shipping-page" class="page">
+        <div class="charts-grid">
+          <div class="chart-card">
+            <div class="chart-header"><h3>Delivery Status Breakdown</h3></div>
+            <div class="chart-body chart-body-sm">
+              <canvas id="deliveryLargeChart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header"><h3>Carrier On-Time Rate</h3></div>
+            <div class="chart-body chart-body-sm">
+              <canvas id="shipperOnTimeChart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card span-2">
+            <div class="chart-header"><h3>Shipper Comparison — Orders &amp; Avg Freight</h3></div>
+            <div class="chart-body">
+              <canvas id="shipperComparisonChart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card span-2">
+            <div class="chart-header"><h3>Freight Cost by Country (Top 15)</h3></div>
+            <div class="chart-body chart-body-tall">
+              <canvas id="freightByCountryChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== PRODUCTS PAGE ===== -->
+      <div id="products-page" class="page">
+        <div class="charts-grid">
+          <div class="chart-card span-2">
+            <div class="chart-header"><h3>Top 10 Products by Revenue</h3></div>
+            <div class="chart-body chart-body-tall">
+              <canvas id="topProductsChart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header"><h3>Revenue by Category</h3></div>
+            <div class="chart-body">
+              <canvas id="categoryBarChart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header"><h3>Inventory Levels (Top 15 Products)</h3></div>
+            <div class="chart-body">
+              <canvas id="inventoryChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== TEAM PAGE ===== -->
+      <div id="team-page" class="page">
+        <div class="charts-grid">
+          <div class="chart-card span-2">
+            <div class="chart-header"><h3>Revenue by Sales Employee</h3></div>
+            <div class="chart-body">
+              <canvas id="employeeRevenueChart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card span-2">
+            <div class="chart-header"><h3>Orders Handled by Employee</h3></div>
+            <div class="chart-body">
+              <canvas id="employeeOrdersChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end page-container -->
+  </main>
+</div>
+
+<script src="/static/js/dashboard.js"></script>
+</body>
+</html>
